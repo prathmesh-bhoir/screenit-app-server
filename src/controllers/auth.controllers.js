@@ -15,6 +15,12 @@ const register = async (req, res, next) => {
     }
 
     try {
+        const { email } = req.body;
+        const existinguser = await User.findOne({ email });
+        if(existinguser){
+            return res.status(404).json({message: "User already exist!"})
+        }
+
         const user = await User.create( req.body );
 
         user.toObject();
