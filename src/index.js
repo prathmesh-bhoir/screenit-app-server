@@ -1,7 +1,9 @@
 require( 'dotenv' ).config();
 
 const express = require( 'express' );
+
 const cors = require( 'cors' );
+const { connect } = require( './db/init' );
 
 const app = express();
 
@@ -20,12 +22,13 @@ app.use( require( './middleware/errors' ).errorHandler );
 
 const PORT = process.env.SERVER_PORT || 9000;
 
-// connect()
-//     .then(() => {
+
+connect()
+    .then(() => {
         app.listen( PORT, () => {
             console.log( `server started on - http://localhost:${PORT}` );
         });
-    // })
-    // .catch(error => {
-    //     process.exit( 1 );
-    // });
+    })
+    .catch(error => {
+        process.exit( 1 );
+});

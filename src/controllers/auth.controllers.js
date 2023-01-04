@@ -1,6 +1,10 @@
 const jwt = require( 'jsonwebtoken' );
-const UserService = require( '../services/auth.services' );
+// const userService = require( '../services/auth.services' );
 const { Errors } = require( '../constants' );
+const mongoose = require('mongoose');
+const bcrypt = require( 'bcrypt' );
+
+const User = mongoose.model( 'User' );
 
 const register = async (req, res, next) => {
     if( Object.keys( req.body ).length === 0 ) {
@@ -11,22 +15,22 @@ const register = async (req, res, next) => {
     }
 
     try {
-        const user = await UserService.addUser( req.body );
+        const user = await User.create( req.body );
 
-        const userObj = user.toObject();
+        user.toObject();
 
-        delete userObj.password;
+        const userDetails = { name: user.name, email: user.email }
 
         res.status( 201 ).json({
             status: 'success',
-            data: userObj
+            data: userDetails
         });
     } catch (error) {
         next(error)
     }
 }
 
-const login =  async (req, res, next) => {
+const login = async ( req, res ) => {
     if( Object.keys( req.body ).length === 0 ) {
         return res.status( 400 ).json({
             status: 'error',
@@ -34,37 +38,37 @@ const login =  async (req, res, next) => {
         });
     }
 
-    try {
-        const user = await UserService.validateUser( req.body );
+    const { email, password } = req.body;
 
-        if( !user ) {
-            const error = new Error( 'Invalid credentials' );
-            error.name = Errors.Unauthorized;
-            return next( error );
+    try {
+
+        const existinguser = await User.findOne({ email });
+        if(!existinguser){
+            return res.status(404).json({message: "User don't exist!"})
         }
 
-        jwt.sign( {email: user.email}, process.env.JWT_SECRET, { expiresIn: '1d' }, ( err, token ) => {
-            if( err ) {
-                err.name = Errors.InternalServerError;
-                return next( err );
-            }
+        const isPasswordCrt = await bcrypt.compare( password, existinguser.password )
+        if(!isPasswordCrt){
+            return res.status(400).json({message: "Invalid Password!"})
+        }
 
-            res.json({
-                status: 'success',
-                data: {
-                    name: user.name,
-                    email: user.email,
-                    token
-                }
-            });
+        const token = jwt.sign({ email: existinguser.email, id:existinguser._id}, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.json({
+            status: 'success',
+            data: {
+                name: existinguser.name,
+                email,
+                token
+            }
         });
     } catch (error) {
         const err = new Error( 'Something went wrong during login' );
         err.name = Errors.InternalServerError;
-        return next( err );
+        return next( err );       
     }
+    
 }
-
 
 module.exports = {
     register,

@@ -1,31 +1,31 @@
-const mongoose = require('mongoose');
-const bcrypt = require( 'bcrypt' );
+// const mongoose = require('mongoose');
+// const bcrypt = require( 'bcrypt' );
 
-const User = mongoose.model( 'User' );
+// const User = mongoose.model( 'User' );
 
-const addUser = ( newUserDetails ) => {
-    return User.create( newUserDetails );
-};
+// const addUser = ( newUserDetails ) => {
+//     return User.create( newUserDetails );
+// };
 
-const validateUser = async (loginUser) => {
-    const user = await User.findOne({
-        email: loginUser.email
-    })
+// const validateUser = async ( loginUser ) => {
+//     const user = await User.findOne({
+//         email: loginUser.email
+//     })
 
-    if(!user){
-        return res.status(404).json({message: "User don't exist!"})
-    }
+//     if(!user){
+//         return res.status(404).json({message: "User don't exist!"})
+//     }
 
-    const isMatch = await bcrypt.compare( loginUser.password, user.password );
+//     const isMatch = await bcrypt.compare( loginUser.password, user.password );
 
-    if(!isMatch){
-        return res.status(400).json({message: "Invalid credentials!"})
-    }
+//     if(!isMatch){
+//         return res.status(400).json({message: "Invalid credentials!"})
+//     }
 
-    return user;
-}
+//     return user;
+// }
 
-module.exports = {
-    addUser,
-    validateUser
-};
+// module.exports = {
+//     addUser,
+//     validateUser
+// };
