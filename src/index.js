@@ -16,6 +16,7 @@ app.use( express.json() );
 app.use( express.urlencoded( { extended: false } ) );
 
 app.use( '/auth', require( './routes/auth.routes' ) );
+app.use( '/watchlist', require('./routes/watchlist.routes') );
 
 app.use( require( './middleware/errors' ).resourceNotFound );
 app.use( require( './middleware/errors' ).errorHandler );
