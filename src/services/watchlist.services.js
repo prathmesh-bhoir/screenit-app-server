@@ -32,7 +32,31 @@ const addToList = async (id, stock) => {
     return data;
 }
 
+const deleteFromList = async (id, stock) => {
+
+    const watchlist = await User.findOne({
+        watchlist : stock
+    })
+    if(!watchlist){
+        return null
+    }
+
+    const data = await User.updateOne(
+        { 
+            _id: id 
+        },
+        {
+            $pull:{
+                watchlist: stock
+            }
+        }
+    );
+
+    return data;
+}
+
 module.exports = {
     getWatchlist,
-    addToList
+    addToList,
+    deleteFromList
 };

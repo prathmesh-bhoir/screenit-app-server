@@ -39,8 +39,31 @@ const addToList = async (req, res, next) => {
     }
 }
 
+const deleteFromList = async (req, res, next) => {
+    const { id } = res.locals.claims;
+    const stock = "META"
+    try {      
+        const data = await watchlistServices.deleteFromList(id, stock)
+        
+        if(data == null){
+            return res.status( 400 ).json({
+                status: 'error',
+                message: `Does not exist in the watchlist!`
+            });
+        }
+        res.status( 201 ).json({
+            status: 'success',
+            message: 'Removed from watchlist successfully!'
+        });
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    }
+}
+
 
 module.exports = {
     addToList,
-    getWatchlist
+    getWatchlist,
+    deleteFromList
 };

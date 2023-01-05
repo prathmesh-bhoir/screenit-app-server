@@ -7,5 +7,6 @@ const router = express.Router();
 
 router.get('/', authorize, watchlistCtrl.getWatchlist)
 router.patch('/', authorize, watchlistCtrl.addToList);
+router.patch('/delete', authorize, watchlistCtrl.deleteFromList);
 
 module.exports = router;
