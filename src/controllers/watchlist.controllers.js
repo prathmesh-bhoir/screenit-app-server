@@ -17,7 +17,7 @@ const getWatchlist = async (req, res, next) => {
 }
 
 const addToList = async (req, res, next) => {
-    
+
     const { stock } = req.query
     
     const { id } = res.locals.claims;
@@ -50,7 +50,7 @@ const deleteFromList = async (req, res, next) => {
         const data = await watchlistServices.deleteFromList(id, stock)
         
         if(data == null){
-            return res.status( 400 ).json({
+            return res.status( 404 ).json({
                 status: 'error',
                 message: `Does not exist in the watchlist!`
             });
