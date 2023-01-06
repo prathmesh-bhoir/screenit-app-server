@@ -7,9 +7,9 @@ const { connect } = require( './db/init' );
 
 const app = express();
 
-app.use( cors({
-    origin: 'http://localhost:8888',
-}));
+// app.use( cors({
+//     origin: 'http://localhost:8888',
+// }));
 app.use( cors({
     origin: process.env.FRONTEND_URL,
 }));
