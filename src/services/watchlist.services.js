@@ -9,7 +9,6 @@ const getWatchlist = async (_id) => {
 }
 
 const addToList = async (id, stock) => {
-
     const watchlist = await User.findOne({
         $and: [
             {

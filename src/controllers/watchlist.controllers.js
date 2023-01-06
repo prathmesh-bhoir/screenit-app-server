@@ -17,8 +17,9 @@ const getWatchlist = async (req, res, next) => {
 }
 
 const addToList = async (req, res, next) => {
-    console.log(req.query)
+    
     const { stock } = req.query
+    
     const { id } = res.locals.claims;
     try {      
         const data = await watchlistServices.addToList(id, stock)
