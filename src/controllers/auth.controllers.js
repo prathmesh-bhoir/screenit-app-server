@@ -60,11 +60,11 @@ const login = async ( req, res ) => {
 
         const claims = {
             id: existinguser._id,
-            name: existinguser.name,
             email: existinguser.email,
         };
 
-        const token = jwt.sign({ claims }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign( { claims } , process.env.JWT_SECRET, { expiresIn: '1d' });
+        console.log(claims)
 
         res.json({
             status: 'success',

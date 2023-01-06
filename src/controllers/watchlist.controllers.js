@@ -2,10 +2,9 @@ const { Errors } = require( '../constants' );
 const watchlistServices = require('../services/watchlist.services')
 
 const getWatchlist = async (req, res, next) => {
-    const {email} = res.locals.claims;
+    const {id} = res.locals.claims;
     try {
-
-        const watchlist = await watchlistServices.getWatchlist(email);
+        const watchlist = await watchlistServices.getWatchlist(id);
   
         res.status( 201 ).json({
             status: 'success',
@@ -18,8 +17,9 @@ const getWatchlist = async (req, res, next) => {
 }
 
 const addToList = async (req, res, next) => {
+    console.log(req.query)
+    const { stock } = req.query
     const { id } = res.locals.claims;
-    const stock = "META"
     try {      
         const data = await watchlistServices.addToList(id, stock)
         
@@ -29,6 +29,7 @@ const addToList = async (req, res, next) => {
                 message: `Already added to watchlist!`
             });
         }
+
         res.status( 201 ).json({
             status: 'success',
             message: 'Added to watchlist successfully!'
@@ -40,8 +41,10 @@ const addToList = async (req, res, next) => {
 }
 
 const deleteFromList = async (req, res, next) => {
+    console.log(req.query)
+    const { stock } = req.query
     const { id } = res.locals.claims;
-    const stock = "META"
+    console.log(id)
     try {      
         const data = await watchlistServices.deleteFromList(id, stock)
         

@@ -6,7 +6,7 @@ const watchlistCtrl = require('../controllers/watchlist.controllers');
 const router = express.Router();
 
 router.get('/', authorize, watchlistCtrl.getWatchlist)
-router.patch('/', authorize, watchlistCtrl.addToList);
-router.patch('/delete', authorize, watchlistCtrl.deleteFromList);
+router.patch('/add', authorize, watchlistCtrl.addToList);
+router.patch('/del', authorize, watchlistCtrl.deleteFromList);
 
 module.exports = router;

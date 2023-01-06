@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 
 const User = mongoose.model( 'User' );
 
-const getWatchlist = async (email) => {
-
-    const data = await User.findOne({ email });
+const getWatchlist = async (_id) => {
+    const data = await User.findOne({ _id });
 
     return data.watchlist;
 }
@@ -12,8 +11,15 @@ const getWatchlist = async (email) => {
 const addToList = async (id, stock) => {
 
     const watchlist = await User.findOne({
-        watchlist : stock
-    })
+        $and: [
+            {
+                _id: id
+            },
+            {
+                watchlist : stock
+            }
+        ]
+    });
     if(watchlist){
         return null
     }
@@ -35,8 +41,15 @@ const addToList = async (id, stock) => {
 const deleteFromList = async (id, stock) => {
 
     const watchlist = await User.findOne({
-        watchlist : stock
-    })
+        $and: [
+            {
+                _id: id
+            },
+            {
+                watchlist : stock
+            }
+        ]
+    });
     if(!watchlist){
         return null
     }
